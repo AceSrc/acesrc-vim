@@ -1,0 +1,55 @@
+snippet header "cheader"
+#include <assert.h>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <string.h>
+#include <vector>
+#include <map>
+#include <algorithm>
+using namespace std;
+
+${0}
+endsnippet
+
+snippet main "main"
+int main(int argc, char **argv) {
+	${0}
+	return 0;
+}
+endsnippet
+
+snippet sc "scanf"
+scanf("${1}", ${2});
+${0}
+endsnippet
+
+snippet wsc "scanf"
+while (scanf("${1}", ${2}) != EOF) {
+	${0}
+}
+endsnippet
+
+snippet for "for"
+for (${1}){
+	${0}
+}
+endsnippet
+
+snippet fo "for one line" 
+for (${1}) ${4};
+${0}
+endsnippet
+
+snippet br "break line"
+puts("");
+${0}
+endsnippet
+
+snippet con "conclusion"
+/********************************************
+Stupid Point:
+	${0}
+********************************************/
+endsnippet

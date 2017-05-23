@@ -1,0 +1,64 @@
+#~/.vim/UltiSnips/markdown.snippets
+
+snippet docd "document description" b
+---
+title: ${1:title}
+guid: `!p
+import uuid
+if not snip.c:
+	guid = uuid.uuid4().get_hex()
+snip.rv = guid
+`
+date: `!v strftime("%Y-%m-%d %H:%M:%S")`
+---
+
+${0}
+endsnippet
+
+snippet head "Markdown header" b
+---
+title: ${1:title}
+layout: post
+guid: `!p
+import uuid
+if not snip.c:
+	guid = uuid.uuid4().get_hex()
+snip.rv = guid
+`
+
+date: `!v strftime("%Y-%m-%d %H:%M:%S")`
+tags:
+	- ${4}
+---
+
+${0}
+endsnippet
+
+snippet prob "Problem header" b
+/********************************************
+online-judge: ${1: online-judge}
+problem-id: ${2: problem-id}
+
+guid: `!p
+import uuid
+if not snip.c:
+	guid = uuid.uuid4().get_hex()
+snip.rv = guid
+`
+
+date: `!v strftime("%Y-%m-%d %H:%M:%S")`
+tags:
+	- ${3}
+---
+********************************************/
+${0}
+endsnippet
+
+snippet cf "codeforces" 
+codeforces
+endsnippet
+
+snippet nod "51nod"
+51nod
+endsnippet
+# vim:ft=snippets:
