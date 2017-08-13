@@ -28,7 +28,7 @@ and uncomment
 
 ## Key-mapping
 
-I set my leader key as <Space>, you can change it into any key you like. 
+I set my leader key as Space, you can change it into any key you like. 
 ```
 let mapleader = "\<Space>"
 ```
