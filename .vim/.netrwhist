@@ -1,7 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_cnt =3
 let g:netrw_dirhist_1='/root/opencv-2.4.9/3rdparty'
 let g:netrw_dirhist_2='/root/games'
 let g:netrw_dirhist_3='/root/git/src/0 Others'
-let g:netrw_dirhist_4='/root/mind/.git'
-let g:netrw_dirhist_5='/root/.vim/bundle/pydiction'

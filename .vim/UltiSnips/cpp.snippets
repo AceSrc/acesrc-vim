@@ -1,14 +1,33 @@
+snippet << "output"
+<< ' ' << ${0} 
+endsnippet
+
+snippet timer "timer"
+st_time = clock();
+${0}
+end_time = clock();
+printf("%d\n", end_time - st_time);
+
+endsnippet
+
 snippet header "cheader"
 #include <assert.h>
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
 #include <string.h>
-#include <vector>
-#include <map>
+#include <stdlib.h>
+#include <stdio.h>
 #include <algorithm>
+#include <iostream>
+#include <map>
+#include <queue>
+#include <string>
+#include <vector>
 using namespace std;
+#ifndef __DEBUG__
+	#define debug NULL
+#else
+	#define debug printf("%s %d\n", __FUNCTION__, __LINE__);
+#endif
+const int inf = 2147483647;
 
 ${0}
 endsnippet
@@ -32,13 +51,24 @@ while (scanf("${1}", ${2}) != EOF) {
 endsnippet
 
 snippet for "for"
-for (${1}){
+for (int i = 0; i < ${1}; i++) {
+	${0}
+}
+endsnippet
+
+snippet forr "for1"
+for (int i = 1; i <= ${1}; i++) {
 	${0}
 }
 endsnippet
 
 snippet fo "for one line" 
-for (${1}) ${4};
+for (int i = 0; i < ${1}; i++) ${2};
+${0}
+endsnippet
+
+snippet foo "for1 one line"
+for (int i = 1; i <= ${1}; i++) ${2};
 ${0}
 endsnippet
 
@@ -52,4 +82,256 @@ snippet con "conclusion"
 Stupid Point:
 	${0}
 ********************************************/
+endsnippet
+
+snippet exgcd "exgcd"
+int exgcd(int a, int b, int &x, int &y) {
+	if (b == 0) {
+		x = 1;
+		y = 1;
+		return a;
+	}	
+	exgcd(b, a % b, y, x);
+	y = y - (a / b) * x;
+}	
+
+${0}
+endsnippet
+
+snippet monoqueue "monoqueue"
+struct monoqueue {
+	bool cmp(const Tnode &a, const Tnode &b) {
+		\\\\ a <= b relation
+		return a <= b;
+	}
+
+	queue<Tnode> q;
+	bool push(const Tnode &x) {
+		if (q.empty() || cmp(q.back(), x)) {
+			q.push(x);
+			return true;
+		}
+		return false;
+	}
+	
+	void pop() {
+		q.pop();
+	}
+
+	Tnode back() {
+		return q.back();
+	}
+
+	Tnode front() {
+		return q.front();
+	}
+};
+
+${0}
+endsnippet
+
+snippet read "fast read"
+char ch;
+void get(int &x) {
+	x = 0;
+	for (ch = getchar(); ch < '0' || ch > '9'; ch = getchar());
+	for ( ; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+}
+
+${0}
+endsnippet
+
+snippet guass "guass"
+int R;
+long double mat[maxn][maxn];
+long double ans[maxn];
+
+void Gauss() {
+	for (int i = 0; i < R; i++) {
+		int tar = i;
+		for (int j = i + 1; j < R; j++) 
+			if (fabs(mat[j][i]) > fabs(mat[tar][i])) tar = j;
+		if (tar != i) {
+			for (int j = i; j <= R; j++) swap(mat[i][j], mat[tar][j]);
+		}
+		for (int j = i + 1; j < R; j++) {
+		long double aoe = mat[j][i] / mat[i][i];
+			for (int k = i; k <= R; k++) 
+			mat[j][k] -= aoe * mat[i][k];
+		}
+	}
+	for (int i = R - 1; i > -1; i--) {
+		ans[i] = mat[i][R];
+		for (int j = i + 1; j < R; j++) ans[i] -= mat[i][j] * ans[j];
+		ans[i] /= mat[i][i]; 
+	}
+}
+
+${0}
+endsnippet
+
+snippet getsize "getsize"
+vector<int> e[maxn];
+int getsize(int u, int pre) {
+	size[u] = 1;
+	for (int i = 0; i < e[u].size(); i++) 
+		if (e[u][i] != pre) {
+		size[u] += getsize(e[u][i], u);
+	}
+}
+
+${0}
+endsnippet
+
+snippet polyinv "polyinv"
+const int mod = 16515073;
+const int g = 5;
+
+void reverse(int *d, int bits) {
+	int n = (1 << bits), j = (1 << bits) >> 1;
+	for (int i = 1; i < n - 1; i++) {
+		if (i < j) swap(d[i], d[j]);
+		int t = (1 << bits) >> 1;
+		while (t <= j) {
+			j -= t;
+			t >>= 1;
+		}
+		j += t;
+	}
+}
+
+int power(int a, int times) {
+	int rt = 1, base = a;
+	while (times) {
+		if (times & 1) rt = 1LL * rt * base % mod;
+		base = 1LL * base * base % mod;
+		times >>= 1;
+	}
+	return rt;
+}
+
+void fft(int *d, int bits, int on) {
+	reverse(d, bits);
+	int n = (1 << bits);
+	int aoe = g;
+	if (on == 1) aoe = power(g, mod - 2);
+	for (int s = 0; s < bits; s++) {
+		int m = (1 << s) << 1, p = (1 << s);
+		int w = power(aoe, (mod - 1) / m);
+		for (int i = 0; i < n; i += m) {
+			int cur = 1;
+			for (int j = 0; j < p; j++) {
+				int x = d[i + j], y = 1LL * d[i + p + j] * cur % mod;
+				d[i + j] = (x + y) % mod;
+				d[i + p + j] = (x - y) % mod;
+				cur = 1LL * cur * w % mod;
+			}
+		}
+	}
+
+	if (on == 1) {
+		int aoe = power(n, mod - 2);
+		for (int i = 0; i < n; i++) d[i] = 1LL * d[i] * aoe % mod;
+	}
+}
+
+const int maxn = 1000000;
+int tmp[maxn];
+void GetInv(int *A, int *A0, int t) {
+    if (t == 1) {
+        A0[0] = power(A[0], mod - 2);
+        return ;
+    }
+    GetInv(A, A0, (t + 1) >> 1);
+    int bits = 0;
+    for ( ; (1 << bits) < t; bits++);
+    bits++;
+
+    int k = (1 << bits);
+    int inv_k = power(k, mod - 2);
+    //cout << 1LL * k * inv_k % mod << endl;
+
+    for (int i = 0; i <= t - 1; i++) tmp[i] = A[i];
+    for (int i = t; i <= k - 1; i++) tmp[i] = 0;
+    fft(tmp, bits, 0);
+    fft(A0, bits, 0);
+    for (int i = 0; i <= k - 1; i++) tmp[i] = (2 - 1LL * tmp[i] * A0[i] % mod) % mod;
+    for (int i = 0; i <= k - 1; i++) A0[i] = 1LL * A0[i] * tmp[i] % mod;
+    fft(A0, bits, 1);
+    for (int i = t; i <= k - 1; i++) A0[i] = 0;
+}
+
+void mulpoly(int *rt, int *a, int *b, int n) {
+    int k = 0;
+    for ( ; (1 << k) < n; k++);
+    k++;
+
+    for (int i = n; i < (1 << k); i++) a[i] = b[i] = 0;
+    fft(a, k, 0);
+    fft(b, k, 0);
+    for (int i = 0; i < (1 << k); i++) rt[i] = 1LL * a[i] * b[i] % mod;
+    fft(rt, k, 1);
+}
+
+int a[maxn], b[maxn], c[maxn];
+int main() {
+    //int n;
+    //while (cin >> n) {
+        //for (int i = 0; i < n; i++) cin >> a[i];
+        //for (int i = 0; i < n; i++) cin >> b[i];
+        //mulpoly(c, a, b, n);
+        //for (int i = 0; i < n * 2; i++) cout << (c[i] + mod) % mod << ' ';
+        //cout << endl;
+    //}
+    int n;
+    while (cin >> n) {
+        for (int i = 0; i < n; i++) cin >> a[i];
+        GetInv(a, b, n);
+        mulpoly(c, a, b, n);
+        for (int i = 0; i < n; i++) cout << (c[i] + mod) % mod << endl;
+        //for (int i = 0; i < n; i++) cout << b[i] << endl;
+        //for (int i = 0; i < n; i++) cout << (1LL * a[i] * b[i] % mod + mod) % mod << endl;
+    }
+}
+
+${0}
+endsnippet
+
+snippet power "power"
+int power(int x, int times) {
+	int rt = 1, base = x;
+	while (times) {
+		if (times & 1) rt = 1LL * rt * base % mod;
+		base = 1LL * base * base % mod;
+		times >>= 1;
+	}
+	return rt;
+}
+
+${0}
+endsnippet
+
+snippet sieve "sieve"
+int prime[maxn], primecnt, mu[maxn], phi[maxn];
+bool notprime[maxn];
+void sieve() {
+    mu[1] = phi[1] = 1;
+    for (int i = 2; i < maxn; i++) {
+        if (!notprime[i]) prime[primecnt++] = i, mu[i] = -1, phi[i] = i - 1;
+        for (int j = 0; prime[j] * i < maxn; j++) {
+            notprime[ prime[j] * i ] = true;
+            if (i % prime[j] == 0) {
+                phi[ i * prime[j] ] = phi[i] * prime[j];
+                mu[ i * prime[j] ] = 0;
+                break;
+            }
+            else {
+                mu[i * prime[j]] = -mu[i];
+                phi[i] = phi[i] * (prime[j] - 1);
+            }
+        }
+    }
+} 
+
+${0}
 endsnippet

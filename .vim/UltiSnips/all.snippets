@@ -1,20 +1,5 @@
 #~/.vim/UltiSnips/markdown.snippets
 
-snippet docd "document description" b
----
-title: ${1:title}
-guid: `!p
-import uuid
-if not snip.c:
-	guid = uuid.uuid4().get_hex()
-snip.rv = guid
-`
-date: `!v strftime("%Y-%m-%d %H:%M:%S")`
----
-
-${0}
-endsnippet
-
 snippet head "Markdown header" b
 ---
 title: ${1:title}
@@ -22,7 +7,7 @@ layout: post
 guid: `!p
 import uuid
 if not snip.c:
-	guid = uuid.uuid4().get_hex()
+	guid = uuid.uuid4()
 snip.rv = guid
 `
 
@@ -42,7 +27,7 @@ problem-id: ${2: problem-id}
 guid: `!p
 import uuid
 if not snip.c:
-	guid = uuid.uuid4().get_hex()
+	guid = uuid.uuid4()
 snip.rv = guid
 `
 
