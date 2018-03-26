@@ -1,4 +1,6 @@
 # acesrc-vim
+这是我按照我电脑上的vim8配的环境, 用之前需要 lua 和 python 支持, 而且运行BundleInstall之前需要安装Vundle
+
 acesrc's Vim Configuration.
 
 Using [Vundle](https://github.com/VundleVim/Vundle.vim) to manage Plugins. 
